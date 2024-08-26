@@ -25,17 +25,19 @@ class _HomeScreenState extends State<HomeScreen> {
     "assets/sounds/sound6.mp3"
   ];
 
-  late AudioPlayer _audioPlayer;
-
-  @override
-  void initState() {
-    super.initState();
-    _audioPlayer = AudioPlayer();
-  }
+  List<AudioPlayer> _audioPlayers = [
+    AudioPlayer(),
+    AudioPlayer(),
+    AudioPlayer(),
+    AudioPlayer(),
+    AudioPlayer(),
+  ];
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    for (int i = 0; i < _audioPlayers.length; i++) {
+      _audioPlayers[i].dispose();
+    }
     super.dispose();
   }
 
@@ -57,27 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: _soundButton(_texts[0], _soundPaths[0]),
+                    child: _soundButton(0),
                   ),
                   Expanded(
                     flex: 1,
-                    child: _soundButton(_texts[1], _soundPaths[1]),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: _soundButton(_texts[2], _soundPaths[2]),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _soundButton(_texts[3], _soundPaths[3]),
+                    child: _soundButton(1),
                   ),
                 ],
               ),
@@ -89,11 +75,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: _soundButton(_texts[4], _soundPaths[4]),
+                    child: _soundButton(2),
                   ),
                   Expanded(
                     flex: 1,
-                    child: _soundButton(_texts[5], _soundPaths[5]),
+                    child: _soundButton(3),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: _soundButton(4),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: _soundButton(5),
                   ),
                 ],
               ),
@@ -104,18 +106,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _soundButton(String displayText, String soundPath) {
+  Widget _soundButton(int index) {
     return Container(
       padding: EdgeInsets.all(8.0),
       child: ElevatedButton(
-        onPressed: () => _playSound(soundPath),
-        child: Text(displayText),
+        onPressed: () => _playSound(index),
+        child: Text(_texts[index]),
       ),
     );
   }
 
-  _playSound(String soundPath) async {
-    await _audioPlayer.setAsset(soundPath);
-    _audioPlayer.play();
+  _playSound(int index) async {
+    await _audioPlayers[index].setAsset(_soundPaths[index]);
+    _audioPlayers[index].play();
   }
 }
