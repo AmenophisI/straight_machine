@@ -31,7 +31,20 @@ class _HomeScreenState extends State<HomeScreen> {
     AudioPlayer(),
     AudioPlayer(),
     AudioPlayer(),
+    AudioPlayer(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _initSounds();
+  }
+
+  void _initSounds() async {
+    for (int i = 0; i < _audioPlayers.length; i++) {
+      await _audioPlayers[i].setAsset(_soundPaths[i]);
+    }
+  }
 
   @override
   void dispose() {
@@ -117,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _playSound(int index) async {
-    await _audioPlayers[index].setAsset(_soundPaths[index]);
+    await _audioPlayers[index].seek(Duration.zero);
     _audioPlayers[index].play();
   }
 }
